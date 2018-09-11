@@ -7,6 +7,6 @@ jobs:
       - checkout
       - run: make
       - deploy: 
-        command: mv examples/*.pdf output
+          command: mv examples/*.pdf output
       - store_artifacts:
           path: output
