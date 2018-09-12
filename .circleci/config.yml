@@ -8,7 +8,7 @@ jobs:
       - run: 
           name: Compile PDFs
           working_directory: src
-          command: pwd; latexmk -pdfxe
+          command: latexmk -pdfxe
       - deploy:
           name: Move PDFs to output folder
           command: mkdir out; mv src/*.pdf $_ 
