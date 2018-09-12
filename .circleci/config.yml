@@ -11,6 +11,6 @@ jobs:
           command: pwd; latexmk -pdfxe
       - deploy:
           name: Move PDFs to output folder
-          command: mkdir out; mv src/*.tex $_ 
+          command: mkdir out; mv src/*.pdf $_ 
       - store_artifacts:
           path: out
