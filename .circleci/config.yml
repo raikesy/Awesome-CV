@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: thomasweise/texlive
+      - image: "raabf/latex-versions:texlive2018"
     steps:
       - checkout
       - run: 
