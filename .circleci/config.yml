@@ -5,6 +5,12 @@ jobs:
       - image: thomasweise/texlive
     steps:
       - checkout
-      - run: make
+      - run: 
+          name: Compile PDFs
+          working_dir: src
+          command: latexmk -pdfxe
+      - deploy:
+          name: Move PDFs to output folder
+          command: mkdir out; mv src/*.tex $_ 
       - store_artifacts:
           path: out
