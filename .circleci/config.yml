@@ -2,13 +2,13 @@ version: 2
 jobs:
   build:
     docker:
-      - image: "raabf/latex-versions:texlive2018"
+      - image: "miktex/miktex"
     steps:
       - checkout
       - run: 
           name: Compile PDFs
           working_directory: src
-          command: latexmk -pdfxe
+          command: latexmk -pdfxe -quiet
       - deploy:
           name: Move PDFs to output folder
           command: mkdir out; mv src/*.pdf $_ 
