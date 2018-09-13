@@ -24,7 +24,7 @@ jobs:
           name: Hash output folder
           command: find src/out -type f -exec md5sum {} \; | md5sum > outHashFile
       - save_cache:
-          key: v1-auxfiles-{{ checksum outHashFile }}
+          key: v1-auxfiles-{{ checksum "outHashFile" }}
           paths:
             - src/out
       - deploy:
