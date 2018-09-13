@@ -8,10 +8,10 @@ jobs:
           name: Update local package database
           command: mpm --update-db
       - checkout
-    #   - restore_cache:
-    #       keys:
-    #         - v1-packages-{{ checksum "src/externalpackages.sty" }}
-    #         - v1-packages-
+      - restore_cache:
+          keys:
+            - v2-packages-{{ checksum "src/externalpackages.sty" }}
+            - v2-packages-
     #   - restore_cache:
     #       keys:
     #         - v1-auxfiles-
@@ -19,10 +19,10 @@ jobs:
           name: Compile PDFs
           working_directory: src
           command: latexmk -pdfxe -outdir=out
-    #   - save_cache:
-    #       key: v1-packages-{{ checksum "src/externalpackages.sty" }}
-    #       paths: 
-    #         - /miktex/.miktex
+      - save_cache:
+          key: v2-packages-{{ checksum "src/externalpackages.sty" }}
+          paths: 
+            - /miktex/.miktex
       - run:
           name: Hash output folder
           command: find src/out -type f -exec md5sum {} \; | md5sum > outHashFile
