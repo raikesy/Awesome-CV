@@ -7,6 +7,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
+            - v1-packages-{{ checksum "src/external-packages.sty" }}
             - v1-packages-
       - run: 
           name: Compile PDFs
