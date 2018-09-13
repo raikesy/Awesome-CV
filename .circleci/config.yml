@@ -12,9 +12,9 @@ jobs:
           keys:
             - v2-packages-{{ checksum "src/externalpackages.sty" }}
             - v2-packages-
-    #   - restore_cache:
-    #       keys:
-    #         - v1-auxfiles-
+      - restore_cache:
+          keys:
+            - v2-auxfiles-
       - run: 
           name: Compile PDFs
           working_directory: src
@@ -26,10 +26,10 @@ jobs:
       - run:
           name: Hash output folder
           command: find src/out -type f -exec md5sum {} \; | md5sum > outHashFile
-    #   - save_cache:
-    #       key: v1-auxfiles-{{ checksum "outHashFile" }}
-    #       paths:
-    #         - src/out
+      - save_cache:
+          key: v2-auxfiles-{{ checksum "outHashFile" }}
+          paths:
+            - src/out
       - deploy:
           name: Move PDFs to artifact folder
           command: mkdir PDFs; mv src/out/*.pdf $_ 
