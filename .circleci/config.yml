@@ -9,16 +9,26 @@ jobs:
           keys:
             - v1-packages-{{ checksum "src/external-packages.sty" }}
             - v1-packages-
+      - restore_cache:
+          keys:
+            - v1-auxfiles-
       - run: 
           name: Compile PDFs
           working_directory: src
-          command: latexmk -pdfxe -quiet
+          command: latexmk -pdfxe -quiet -outdir=out
       - save_cache:
           key: v1-packages-{{ checksum "src/external-packages.sty" }}
           paths: 
             - /miktex/.miktex
+      - run:
+          name: Hash output folder
+          command: find src/out -type f -exec md5sum {} \; | md5sum > outHashFile
+      - save_cache:
+          key: v1-auxfiles-{{ checksum outHashFile }}
+          paths:
+            - src/out
       - deploy:
-          name: Move PDFs to output folder
-          command: mkdir out; mv src/*.pdf $_ 
+          name: Move PDFs to artifact folder
+          command: mkdir PDFs; mv src/out/*.pdf $_ 
       - store_artifacts:
-          path: out
+          path: PDFs
