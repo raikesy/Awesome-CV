@@ -115,8 +115,6 @@
 %-------------------------------------------------------------------------------
 %                Configuration for fonts
 %-------------------------------------------------------------------------------
-% Set the FontAwesome font to be up-to-date.
-\newfontfamily\FA[Path=\@fontdir]{FontAwesome}
 % Set font for header (default is Roboto)
 \newfontfamily\headerfont[
   Path=\@fontdir,
@@ -431,7 +429,7 @@
         {}%
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{https://www.linkedin.com/in/\@linkedin}{\faLinkedinSquare\acvHeaderIconSep\@linkedin}%
+          \href{https://www.linkedin.com/in/\@linkedin}{\faLinkedin\acvHeaderIconSep\@linkedin}%
         }%
       \ifthenelse{\isundefined{\@twitter}}%
         {}%
