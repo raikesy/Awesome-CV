@@ -10,7 +10,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-packages-{{ checksum "src/external-packages.sty" }}
+            - v1-packages-{{ checksum "src/externalpackages.sty" }}
             - v1-packages-
       - restore_cache:
           keys:
