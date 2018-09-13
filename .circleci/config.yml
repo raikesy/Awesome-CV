@@ -5,10 +5,17 @@ jobs:
       - image: "miktex/miktex"
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-packages-
       - run: 
           name: Compile PDFs
           working_directory: src
           command: latexmk -pdfxe -quiet
+      - save_cache:
+          key: v1-packages-{{ checksum "src/external-packages.sty" }}
+          paths: 
+            - /miktex/.miktex
       - deploy:
           name: Move PDFs to output folder
           command: mkdir out; mv src/*.pdf $_ 

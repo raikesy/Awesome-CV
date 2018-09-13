@@ -42,53 +42,8 @@
 \ProcessOptions\relax
 \LoadClass{article}
 
-
-%-------------------------------------------------------------------------------
-%                3rd party packages
-%-------------------------------------------------------------------------------
-% Needed to make fixed length table
-\RequirePackage{array}
-% Needed to handle list environment
-\RequirePackage{enumitem}
-% Needed to handle text alignment
-\RequirePackage{ragged2e}
-% Needed to configure page layout
-\RequirePackage{geometry}
-% Needed to make header & footer effeciently
-\RequirePackage{fancyhdr}
-% Needed to manage colors
-\RequirePackage{xcolor}
-% Needed to use \ifxetex-\else-\fi statement
-\RequirePackage{ifxetex}
-% Needed to use \if-\then-\else statement
-\RequirePackage{xifthen}
-% Needed to use a toolbox of programming tools
-\RequirePackage{etoolbox}
-% Needed to change line spacing in specific environment
-\RequirePackage{setspace}
-% Needed to manage fonts
-\RequirePackage[quiet]{fontspec}
-% To support LaTeX quoting style
-\defaultfontfeatures{Ligatures=TeX}
-% Needed to manage math fonts
-\RequirePackage{unicode-math}
-% Needed to use icons from font-awesome
-% (https://github.com/posquit0/latex-fontawesome)
-\RequirePackage{fontawesome}
-\RequirePackage[default,opentype]{sourcesanspro}
-% Needed for the photo ID
-\RequirePackage[skins]{tcolorbox}
-% Needed to deal a paragraphs
-\RequirePackage{parskip}
-% Needed to deal hyperlink
-\RequirePackage[hidelinks,unicode]{hyperref}
-\hypersetup{%
-  pdftitle={},
-  pdfauthor={},
-  pdfsubject={},
-  pdfkeywords={}
-}
-
+% All third party packages extracted into their own package
+\RequirePackage{external-packages}
 
 %-------------------------------------------------------------------------------
 %                Configuration for directory locations
