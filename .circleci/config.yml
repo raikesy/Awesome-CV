@@ -4,6 +4,9 @@ jobs:
     docker:
       - image: "miktex/miktex"
     steps:
+      - run:
+          name: Update local package database
+          command: mpm --update-db
       - checkout
       - restore_cache:
           keys:
@@ -15,9 +18,9 @@ jobs:
       - run: 
           name: Compile PDFs
           working_directory: src
-          command: latexmk -pdfxe -quiet -outdir=out
+          command: latexmk -pdfxe -outdir=out
       - save_cache:
-          key: v1-packages-{{ checksum "src/external-packages.sty" }}
+          key: v1-packages-{{ checksum "src/externalpackages.sty" }}
           paths: 
             - /miktex/.miktex
       - run:
@@ -30,5 +33,10 @@ jobs:
       - deploy:
           name: Move PDFs to artifact folder
           command: mkdir PDFs; mv src/out/*.pdf $_ 
+      - deploy:
+          name: Move logs to log folder
+          command: mkdir logs; mv src/out/*.log $_
       - store_artifacts:
           path: PDFs
+      - store_artifacts:
+          path: logs
