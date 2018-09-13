@@ -8,28 +8,28 @@ jobs:
           name: Update local package database
           command: mpm --update-db
       - checkout
-      - restore_cache:
-          keys:
-            - v1-packages-{{ checksum "src/externalpackages.sty" }}
-            - v1-packages-
-      - restore_cache:
-          keys:
-            - v1-auxfiles-
+    #   - restore_cache:
+    #       keys:
+    #         - v1-packages-{{ checksum "src/externalpackages.sty" }}
+    #         - v1-packages-
+    #   - restore_cache:
+    #       keys:
+    #         - v1-auxfiles-
       - run: 
           name: Compile PDFs
           working_directory: src
           command: latexmk -pdfxe -outdir=out
-      - save_cache:
-          key: v1-packages-{{ checksum "src/externalpackages.sty" }}
-          paths: 
-            - /miktex/.miktex
+    #   - save_cache:
+    #       key: v1-packages-{{ checksum "src/externalpackages.sty" }}
+    #       paths: 
+    #         - /miktex/.miktex
       - run:
           name: Hash output folder
           command: find src/out -type f -exec md5sum {} \; | md5sum > outHashFile
-      - save_cache:
-          key: v1-auxfiles-{{ checksum "outHashFile" }}
-          paths:
-            - src/out
+    #   - save_cache:
+    #       key: v1-auxfiles-{{ checksum "outHashFile" }}
+    #       paths:
+    #         - src/out
       - deploy:
           name: Move PDFs to artifact folder
           command: mkdir PDFs; mv src/out/*.pdf $_ 
