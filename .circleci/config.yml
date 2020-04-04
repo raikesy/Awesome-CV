@@ -32,10 +32,16 @@ jobs:
             - src/out
       - deploy:
           name: Move PDFs to artifact folder
-          command: mkdir PDFs; mv src/out/*.pdf $_ 
+          command: |
+            mkdir PDFs
+            mv src/out/*.pdf $_ 
       - deploy:
           name: Move logs to log folder
-          command: mkdir logs; mv src/out/*.log $_
+          command: |
+            mkdir logs
+            mv src/out/*.log $_
+            mv /miktex/.miktex/texmfs/data/miktex/log/mpmcli.log logs
+          when: always
       - store_artifacts:
           path: PDFs
       - store_artifacts:
