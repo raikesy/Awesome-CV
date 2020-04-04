@@ -4,15 +4,17 @@ jobs:
     docker:
       - image: "miktex/miktex"
     steps:
-      - run:
-          name: Update local package database
-          command: mpm --update-db --verbose
-      - checkout
       - restore_cache:
+          name: Restoring packages
           keys:
             - v2-packages-{{ checksum "src/externalpackages.sty" }}
             - v2-packages-
+      - run:
+          name: Update local packages (Dry run only)
+          command: mpm --find-updates
+      - checkout
       - restore_cache:
+          name: Restoring auxfiles and outfiles
           keys:
             - v2-auxfiles-
       - run: 
@@ -20,13 +22,15 @@ jobs:
           working_directory: src
           command: latexmk -pdfxe -outdir=out
       - save_cache:
+          name: Saving packages 
           key: v2-packages-{{ checksum "src/externalpackages.sty" }}
           paths: 
             - /miktex/.miktex
       - run:
-          name: Hash output folder
+          name: Hash output folder  # To check for changes in entire folder
           command: find src/out -type f -exec md5sum {} \; | md5sum > outHashFile
       - save_cache:
+          name: Saving auxfiles and outfiles
           key: v2-auxfiles-{{ checksum "outHashFile" }}
           paths:
             - src/out
