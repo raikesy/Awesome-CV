@@ -4,34 +4,40 @@ jobs:
     docker:
       - image: "miktex/miktex"
     steps:
+      # Always try to restore packages from cache first
       - restore_cache:
           name: Restoring packages
           keys:
-            # - v2-packages-{{ checksum "src/externalpackages.sty" }}
             - v2-packages-
+      # Will update packages or otherwise just update the db so new packages can be installed at build
       - run:
-          name: Update local packages (Dry run only)
-          command: mpm --list | grep ^i
+          name: Update local packages
+          command: mpm --update
+      # Code is now required to restore auxfiles into
       - checkout
+      # Always restore the most recent auxfile cache
       - restore_cache:
           name: Restoring auxfiles and outfiles
           keys:
             - v2-auxfiles-
+      # TODO: Fix outdir being in srcdir
       - run: 
           name: Compile PDFs
           working_directory: src
           command: latexmk -pdfxe -outdir=out
-      # - run:
-      #     name: Hash package directory
-
+      # Only create a new package cache if something changed
+      # First test: sha256 everything. Probably very slow.
+      - run:
+          name: Hash package directory
+          command: find /miktex/.miktex -type f -exec sha256sum {} \; > packageHashFile
       - save_cache:
           name: Saving packages 
-          key: v2-packages-{{ checksum "src/externalpackages.sty" }}
+          key: v2-packages-{{ checksum "packageHashFile" }}
           paths: 
             - /miktex/.miktex
       - run:
           name: Hash output folder  # To check for changes in entire folder
-          command: find src/out -type f -exec md5sum {} \; | md5sum > outHashFile
+          command: find src/out -type f -exec sha256sum {} \; > outHashFile
       - save_cache:
           name: Saving auxfiles and outfiles
           key: v2-auxfiles-{{ checksum "outHashFile" }}
