@@ -37,7 +37,7 @@ jobs:
             - /miktex/.miktex
       - run:
           name: Hash output folder  # To check for changes in entire folder
-          command: find src/out -type f -exec sha256sum {} \; | sha256sum | tee outHashFile
+          command: find src/out -type f -exec sha256sum {} \; | tee sha256sum | tee outHashFile
       - save_cache:
           name: Saving auxfiles and outfiles
           key: v2-auxfiles-{{ checksum "outHashFile" }}
