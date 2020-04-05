@@ -7,11 +7,11 @@ jobs:
       - restore_cache:
           name: Restoring packages
           keys:
-            - v2-packages-{{ checksum "src/externalpackages.sty" }}
+            # - v2-packages-{{ checksum "src/externalpackages.sty" }}
             - v2-packages-
       - run:
           name: Update local packages (Dry run only)
-          command: mpm --find-updates
+          command: mpm --find-updates # --verbose
       - checkout
       - restore_cache:
           name: Restoring auxfiles and outfiles
@@ -21,6 +21,9 @@ jobs:
           name: Compile PDFs
           working_directory: src
           command: latexmk -pdfxe -outdir=out
+      # - run:
+      #     name: Hash package directory
+
       - save_cache:
           name: Saving packages 
           key: v2-packages-{{ checksum "src/externalpackages.sty" }}

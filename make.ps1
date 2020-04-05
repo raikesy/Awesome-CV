@@ -42,10 +42,10 @@ if ($args.Length -eq 0) {
 }
 elseif ($args.Length -eq 1) {
     $arg = $args[0]
-    if ($arg -like "c") {
+    if ($arg -like "clean") {
         lmk "-C"
     }
-    elseif ($arg -like "e") {
+    elseif ($arg -like "extract") {
         # Copy-Item src/out/*.pdf .
         extract
     }
