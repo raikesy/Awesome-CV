@@ -11,7 +11,7 @@ jobs:
             - v2-packages-
       - run:
           name: Update local packages (Dry run only)
-          command: mpm --find-updates --verbose
+          command: mpm --list | grep ^i
       - checkout
       - restore_cache:
           name: Restoring auxfiles and outfiles
