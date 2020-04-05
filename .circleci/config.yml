@@ -29,7 +29,7 @@ jobs:
       # First test: sha256 everything. Probably very slow.
       - run:
           name: Hash package directory
-          command: find /miktex/.miktex -type f -exec sha256sum {} \; | tee packageHashFile
+          command: find /miktex/.miktex -type f -exec sha256sum {} \; | sha256sum | tee packageHashFile
       - save_cache:
           name: Saving packages 
           key: v2-packages-{{ checksum "packageHashFile" }}
@@ -37,7 +37,7 @@ jobs:
             - /miktex/.miktex
       - run:
           name: Hash output folder  # To check for changes in entire folder
-          command: find src/out -type f -exec sha256sum {} \; | tee outHashFile
+          command: find src/out -type f -exec sha256sum {} \; | sha256sum | tee outHashFile
       - save_cache:
           name: Saving auxfiles and outfiles
           key: v2-auxfiles-{{ checksum "outHashFile" }}
