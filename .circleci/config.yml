@@ -12,7 +12,8 @@ jobs:
       # Will update packages or otherwise just update the db so new packages can be installed at build
       - run:
           name: Update local package database
-          command: mpm --update-db
+          # command: mpm --update-db
+          command: mpm --find-updates
       # Code is now required to restore auxfiles
       - checkout
       # Always restore the most recent auxfile cache
