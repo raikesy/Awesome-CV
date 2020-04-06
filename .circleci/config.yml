@@ -10,9 +10,9 @@ jobs:
       #     keys:
       #       - v2-packages-
       # Will update packages or otherwise just update the db so new packages can be installed at build
-      # - run:
-      #     name: Check for updates
-      #     command: mpm --find-updates
+      - run:
+          name: Update local package database
+          command: mpm --update-db
       # Code is now required to restore auxfiles
       - checkout
       # Always restore the most recent auxfile cache
