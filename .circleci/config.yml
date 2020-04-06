@@ -1,3 +1,10 @@
+# Current status:
+# Should successfully compile the PDFs. Very difficult to work out the most efficient caching logic.
+# Currently aux file and package caching overzealous. Aux files inexplicably so
+# Also there is no mechanism to update packages if they get out of date, other than invalidating the
+# whole cache manually
+
+
 version: 2
 jobs:
   build:
@@ -5,22 +12,23 @@ jobs:
       - image: "miktex/miktex"
     steps:
       # Always try to restore packages from cache first
-      # - restore_cache:
-      #     name: Restoring packages
-      #     keys:
-      #       - v2-packages-
-      # Will update packages or otherwise just update the db so new packages can be installed at build
+      - restore_cache:
+          name: Restoring packages
+          keys:
+            - v2-packages-
+      # Will update packages or otherwise just update the db so new packages can be installed at 
+      # build
       - run:
           name: Update local package database
-          # command: mpm --update-db
-          command: mpm --find-updates
+          command: mpm --update-db
+          # command: mpm --find-updates
       # Code is now required to restore auxfiles
       - checkout
       # Always restore the most recent auxfile cache
-      # - restore_cache:
-      #     name: Restoring auxfiles and outfiles
-      #     keys:
-      #       - v2-auxfiles-
+      - restore_cache:
+          name: Restoring auxfiles and outfiles
+          keys:
+            - v2-auxfiles-
       # TODO: Fix outdir being in srcdir
       - run: 
           name: Compile PDFs
@@ -28,22 +36,22 @@ jobs:
           command: latexmk -pdfxe -outdir=out
       # Only create a new package cache if something changed
       # First test: sha256 everything. Probably very slow.
-      # - run:
-      #     name: Hash package directory
-      #     command: find /miktex/.miktex -type f -exec sha256sum {} \; | sha256sum | tee packageHashFile
-      # - save_cache:
-      #     name: Saving packages 
-      #     key: v2-packages-{{ checksum "packageHashFile" }}
-      #     paths: 
-      #       - /miktex/.miktex
-      # - run:
-      #     name: Hash output folder  # To check for changes in entire folder
-      #     command: find src/out -type f -exec sha256sum {} \; | tee sha256sum | tee outHashFile
-      # - save_cache:
-      #     name: Saving auxfiles and outfiles
-      #     key: v2-auxfiles-{{ checksum "outHashFile" }}
-      #     paths:
-      #       - src/out
+      - run:
+          name: Hash package directory
+          command: find /miktex/.miktex -type f -exec sha256sum {} \; | sha256sum | tee packageHashFile
+      - save_cache:
+          name: Saving packages 
+          key: v2-packages-{{ checksum "packageHashFile" }}
+          paths: 
+            - /miktex/.miktex
+      - run:
+          name: Hash output folder  # To check for changes in entire folder
+          command: find src/out -type f -exec sha256sum {} \; | tee sha256sum | tee outHashFile
+      - save_cache:
+          name: Saving auxfiles and outfiles
+          key: v2-auxfiles-{{ checksum "outHashFile" }}
+          paths:
+            - src/out
       - deploy:
           name: Move PDFs to artifact folder
           command: |
